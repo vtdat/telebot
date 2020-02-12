@@ -1,6 +1,10 @@
-FROM python:3
+FROM python:3-slim
 
-RUN pip install python-telegram-bot requests
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gcc \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install python-telegram-bot requests \
+    && apt-get purge -y --auto-remove gcc
 
 ADD . /
 
