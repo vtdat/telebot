@@ -54,12 +54,25 @@ def duc_meme(update, context):
 
 def a_meme(update, context):
     js = json.loads(requests.get("https://meme-api.herokuapp.com/gimme").text)
-    update.message.bot.send_photo(chat_id=update.message.chat_id, photo=js['url'])
+    update.message.bot.send_photo(chat_id=update.message.chat_id, photo=js['url'], reply_to_message_id=update.message.message_id)
+
+def a_gif(update, context):
+    s = update.message.text.split(' ')
+    keyword = 'not working'
+    if len(s) > 1:
+        keyword = s[1]
+    if keyword == 'conghm1':
+        update.message.reply_text("Rejected, animation contains sensitive content.") 
+    else:
+        js = json.loads(requests.get("https://api.tenor.com/v1/random?key=LIVDSRZULELA&limit=1&q="+keyword).text)
+        if not js['results']:
+            update.message.reply_text("No gif found, don't wait") 
+        else:
+            update.message.bot.send_animation(chat_id=update.message.chat_id, animation=js['results'][0]['media'][0]['tinygif']['url'], reply_to_message_id=update.message.message_id)
 
 def quote(update, context):
     js = json.loads(requests.get("https://api.quotable.io/random").text)
     msg = '"' + js['content'] + '"' +  ' - ' + js['author']
-
     update.message.reply_text('Quote of the day: ' + str(msg)) 
 
 
@@ -82,6 +95,7 @@ def main():
 
     dp.add_handler(CommandHandler("insert_duc_meme", duc_meme))
     dp.add_handler(CommandHandler("insert_a_meme", a_meme))
+    dp.add_handler(CommandHandler("insert_a_gif", a_gif))
     dp.add_handler(CommandHandler("quote", quote))
 
 
