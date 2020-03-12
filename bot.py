@@ -58,6 +58,11 @@ def quote(update, context):
     msg = '<code>"' + js['content'] + '"</code>' +  '\n- ' + js['author']
     update.message.reply_text('Quote of the day: \n {}'.format(msg)) 
 
+def joke(update, context):
+    js = json.loads(requests.get("https://sv443.net/jokeapi/v2/joke/Any?type=single").text)
+    msg = js['joke']
+    update.message.reply_text(msg) 
+
 def main():
     defaults = Defaults(parse_mode=ParseMode.HTML)
     updater = Updater(os.getenv('BOT_SECRETKEY'), use_context=True, defaults=defaults)
@@ -67,6 +72,7 @@ def main():
     dp.add_handler(CommandHandler("insert_duc_meme", duc_meme))
     dp.add_handler(CommandHandler("insert_a_meme", a_meme))
     dp.add_handler(CommandHandler("insert_a_gif", a_gif))
+    dp.add_handler(CommandHandler("joke", joke))
     dp.add_handler(CommandHandler("quote", quote))
 
 
