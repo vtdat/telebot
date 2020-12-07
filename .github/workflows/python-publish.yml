@@ -13,4 +13,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-    - run: echo "name={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
+    - run: echo "date={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
+    - run: echo "${ngay}" >> $GITHUB_ENV
+      env:
+        ngay: ${{ env.date }}
